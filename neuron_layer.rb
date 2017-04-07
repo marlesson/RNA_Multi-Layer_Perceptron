@@ -17,6 +17,6 @@ class NeuronLayer
   end
 
   def to_s
-    @neurons.collect(&:to_s).to_sentence
+    @neurons.collect(&:to_s).join("\n")
   end
 end

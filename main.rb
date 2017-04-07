@@ -5,28 +5,48 @@ require_relative 'rna_multi_layer'
 input  = [0.05, 0.1]
 output = [0.01, 0.99] 
 
-nn  = RNAMultiLayer.new(2, 2, [2, 2], 
+nn     = RNAMultiLayer.new(2, 2, [2, 2], 
         [
           [
-            [0.35, 0.15, 0.2],
-            [0.35, 0.25, 0.3]
+            [0, 0, 0 ],
+            [0, 0, 0 ]
           ],
           [
-            [0.6, 0.4, 0.45],
-            [0.6, 0.5, 0.55]
+            [0 , 0 , 0],
+            [0 , 0 , 0]
           ]
+
+          # [
+          #   [0.35, 0.15, 0.2],
+          #   [0.35, 0.25, 0.3]
+          # ],
+          # [
+          #   [0.6, 0.4, 0.45],
+          #   [0.6, 0.5, 0.55]
+          # ]
         ])
 
-10000.times.each do |t|
-  puts "#{t} > #{nn.calculate_total_error([[input, output]])}"
-  nn.train(input, output)
-end
+fout = File.open("error.log", "w")
 
+puts "********  EPOCA 0 *************"
 out = nn.output(input)
 
-puts "#{nn.inspect}"
-puts ">>> #{out}"
+puts "Error: #{nn.calculate_total_error([[input, output]])}"
+puts "Output: #{nn.last_output}"
 
+puts "#{nn}"
+
+200.times.each do |t|
+  nn.train(input, output)
+
+  puts "********  EPOCA #{t+1} *************"
+
+  puts "Error: #{nn.calculate_total_error([[input, output]])}"
+  puts "Output: #{nn.last_output}"
+  puts "#{nn}"
+
+  fout.puts "#{t}\t#{nn.calculate_total_error([[input, output]])}"
+end
 
 
 # [3300] 0.01% mse
